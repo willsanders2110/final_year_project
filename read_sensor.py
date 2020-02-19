@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import Rpi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 channel = 17
