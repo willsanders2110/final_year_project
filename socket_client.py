@@ -5,8 +5,7 @@ import struct
 from PIL import Image
 import numpy
 
-# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
-# all interfaces)
+# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means all interfaces)
 cv2.namedWindow('Network Image')
 server_socket = socket.socket()
 server_socket.bind(('0.0.0.0', 8200))
@@ -32,6 +31,7 @@ try:
         open_cv_image = numpy.array(image)
         open_cv_image = open_cv_image[:, :, ::-1].copy()
         cv2.imshow('Network Image',open_cv_image)
+        cv2.imwrite('output.jpg', open_cv_image)
         cv2.waitKey(0)
         print('Image is %dx%d' % image.size)
         image.verify()
