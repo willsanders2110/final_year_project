@@ -43,7 +43,7 @@ try:
     # case we want to find out the size of each capture first to keep
     # our protocol simple)
     stream = io.BytesIO()
-    for foo in camera.capture_continuous(stream, 'jpeg'):
+    for foo in image:
         # Write the length of the capture to the stream and flush to
         # ensure it actually gets sent
         connection.write(struct.pack('<L', stream.tell()))
