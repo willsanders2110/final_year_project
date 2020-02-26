@@ -15,4 +15,7 @@ time.sleep(0.1)
 camera.capture(rawCapture, format="bgr")
 image = rawCapture.array
 
-cv2.imwrite("{}.jpg".format(time.time()), image)
+lt = time.localtime(time.time())
+time = "{}_{}_{}_{}_{}".format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min)
+
+cv2.imwrite("{}.jpg".format(time, image))
