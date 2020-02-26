@@ -57,6 +57,9 @@ try:
         stream.truncate()
     # Write a length of zero to the stream to signal we're done
     connection.write(struct.pack('<L', 0))
+
+    connection.close()
+    client_socket.close()
 finally:
     connection.close()
     client_socket.close()
