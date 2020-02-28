@@ -26,7 +26,7 @@ while True:
                 txt = str(data)
                 if data:
                     print(txt)
-                    sock.sendall("GOT SIZE")
+                    sock.sendall("Hi")
             finally:
                 sock.close()
                 connected_clients_sockets.remove(sock)

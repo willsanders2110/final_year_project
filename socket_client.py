@@ -13,7 +13,7 @@ try:
     size = 1
 
     # send image size to server
-    sock.sendall(size.to_bytes(2, 'little'))
+    sock.sendall("Hi")
     answer = sock.recv(4096)
     print(answer)
 
