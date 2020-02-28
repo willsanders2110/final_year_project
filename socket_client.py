@@ -15,6 +15,11 @@ try:
     sock.send(message.encode('utf-8'))
     data = sock.recv(4096)
     data = data.decode('utf-8')
+    print(data)
+
+    image_len = sock.recv(4096)
+    image_len = image_len.decode('utf-8')
+    print(image_len)
 finally:
     sock.close()
 

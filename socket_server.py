@@ -16,7 +16,14 @@ connection, address = server_socket.accept()
 try:
     data = connection.recv(4096)
     data = data.decode('utf-8')
+    print(data)
     message = "Raspberry Pi Ready"
     connection.send(message.encode('utf-8'))
+
+    file = open(image, 'rb')
+    image = file.read()
+    size = len(image)
+    connection.send(size.encode('utf-8'))
+
 finally:
     server_socket.close()
