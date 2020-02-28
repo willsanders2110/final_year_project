@@ -10,10 +10,10 @@ server_socket.bind((HOST, PORT))
 server_socket.listen(10)
 
 while True:
-    connection = server_socket.accept()
+    connection, address = server_socket.accept()
     try:
         print("got here")
-        data = server_socket.recv(4096)
+        data = connection.recv(4096)
         print(data.decode('utf-8'))
         message = "Hi"
         server_socket.send(message.encode('utf-8'))
