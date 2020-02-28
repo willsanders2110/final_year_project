@@ -1,5 +1,7 @@
 import socket
 
+image = "image.png"
+
 HOST = '192.168.0.29'
 PORT = 8200
 
@@ -12,12 +14,9 @@ server_socket.listen(10)
 
 connection, address = server_socket.accept()
 try:
-    print("got here")
     data = connection.recv(4096)
-    print(data.decode('utf-8'))
-    message = "Hi"
+    data = data.decode('utf-8')
+    message = "Raspberry Pi Ready"
     connection.send(message.encode('utf-8'))
 finally:
-    print("closing")
     server_socket.close()
-    print("successfully closed")
