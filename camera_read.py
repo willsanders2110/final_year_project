@@ -27,4 +27,4 @@ time = "{}_{}_{}_{}_{}".format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt
 
 # PC just needs to be pinged, the PC itself doesn't need to actively send that it's ready
 
-cv2.imwrite("image.png".format(time), image)
+cv2.imwrite("{}.jpg".format(time), image)
