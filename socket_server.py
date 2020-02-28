@@ -22,7 +22,7 @@ try:
 
     file = open(image, 'rb')
     image = file.read()
-    size = len(image)
+    size = str(len(image))
     connection.send(size.encode('utf-8'))
 
 finally:
