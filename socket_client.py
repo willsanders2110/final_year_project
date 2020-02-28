@@ -26,7 +26,6 @@ try:
     sock.send(message.encode('utf-8'))
 
     image = open('image.png', 'wb')
-    image.write(image_len)
     data = sock.recv(40960000)
     image.write(data)
     image.close()
