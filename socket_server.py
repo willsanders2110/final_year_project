@@ -12,6 +12,7 @@ server_socket.listen(10)
 while True:
     connection = server_socket.accept()
     try:
+        print("got here")
         data = server_socket.recv(4096)
         print(data.decode('utf-8'))
         message = "Hi"
