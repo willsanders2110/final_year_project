@@ -18,4 +18,6 @@ while True:
         message = "Hi"
         connection.send(message.encode('utf-8'))
     finally:
+        print("closing")
         server_socket.close()
+        print("successfully closed")
