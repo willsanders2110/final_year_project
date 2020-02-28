@@ -1,65 +1,57 @@
-import io
 import socket
-import struct
-import time
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import cv2
+import select
 
-# Connect a client socket to my_server:8000
-client_socket = socket.socket()
-client_socket.connect(('192.168.0.5', 8200))
+imgcounter = 1
+basename = "image%s.png"
 
-# Make a file-like object out of the connection
-connection = client_socket.makefile('wb')
-try:
-    # initialize the camera and grab a reference to the raw camera capture
-    camera = PiCamera()
-    rawCapture = PiRGBArray(camera)
+HOST = '192.168.0.29'
+PORT = 8200
 
-    # allow the camera to warmup
-    time.sleep(0.1)
+connected_clients_sockets = []
 
-    # Read time, and take image every hour or so
-    # Make sure that this can be updated by changing a variable!
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # grab an image from the camera
-    camera.capture(rawCapture, format="bgr")
-    image = rawCapture.array
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server_socket.bind((HOST, PORT))
+server_socket.listen(10)
 
-    lt = time.localtime(time.time())
-    time = "{}_{}_{}_{}_{}".format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min)
+while True:
+    read_sockets, write_sockets, error_sockets = select.select(connected_clients_sockets, [], [])
 
-    # Check every time an image is taken whether it can be sent to the PC or not
-    # If not, then store the data
-    # If it can, check whether there is additional data to send, then send all
+    for sock in read_sockets:
+        if sock == server_socket:
+            sockfd, client_address = server_socket.accept()
+            connected_clients_sockets.append(sockfd)
+        else:
+            try:
+                data = sock.recv(4096)
+                txt = str(data)
+                if data:
+                    if data.startswith('SIZE'):
+                        tmp = txt.split()
+                        size = int(tmp[1])
+                        print('got size')
 
-    # PC just needs to be pinged, the PC itself doesn't need to actively send that it's ready
+                        sock.sendall("GOT SIZE")
 
-    cv2.imwrite("{}.jpg".format(time), image)
+                    elif data.startswith('BYE'):
+                        sock.shutdown()
 
-    # Note the start time and construct a stream to hold image data
-    # temporarily (we could write it directly to connection but in this
-    # case we want to find out the size of each capture first to keep
-    # our protocol simple)
-    stream = io.BytesIO()
-    for foo in image:
-        # Write the length of the capture to the stream and flush to
-        # ensure it actually gets sent
-        connection.write(struct.pack('<L', stream.tell()))
-        connection.flush()
-        # Rewind the stream and send the image data over the wire
-        stream.seek(0)
-        connection.write(stream.read())
+                    else:
+                        myfile = open(basename % imgcounter, 'wb')
+                        myfile.write(data)
 
-        # Reset the stream for the next capture
-        stream.seek(0)
-        stream.truncate()
-    # Write a length of zero to the stream to signal we're done
-    connection.write(struct.pack('<L', 0))
+                        data = sock.recv(40960000)
+                        if not data:
+                            myfile.close()
+                            break
+                        myfile.write(data)
+                        myfile.close()
 
-    connection.close()
-    client_socket.close()
-finally:
-    connection.close()
-    client_socket.close()
+                        sock.sendall("GOT IMAGE")
+                        sock.shutdown()
+            finally:
+                sock.close()
+                connected_clients_sockets.remove(sock)
+        imgcounter += 1
+    server_socket.close()

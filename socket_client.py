@@ -1,41 +1,70 @@
-import io
-import cv2
-import socket
-import struct
-from PIL import Image
-import numpy
+#!/usr/bin/env python
 
-# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means all interfaces)
-cv2.namedWindow('Network Image')
-server_socket = socket.socket()
-server_socket.bind(('0.0.0.0', 8200))
-server_socket.listen(0)
+import random
+import socket, select
+from time import gmtime, strftime
+from random import randint
 
-# Accept a single connection and make a file-like object out of it
-connection = server_socket.accept()[0].makefile('rb')
+image = "tux.png"
+
+HOST = '192.168.0.29'
+PORT = 8200
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = (HOST, PORT)
+sock.connect(server_address)
+
 try:
-    while True:
-        # Read the length of the image as a 32-bit unsigned int. If the
-        # length is zero, quit the loop
-        image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
-        if not image_len:
-            break
-        # Construct a stream to hold the image data and read the image
-        # data from the connection
-        image_stream = io.BytesIO()
-        image_stream.write(connection.read(image_len))
-        # Rewind the stream, open it as an image with PIL and do some
-        # processing on it
-        image_stream.seek(0)
-        image = Image.open(image_stream).convert('RGB')
-        open_cv_image = numpy.array(image)
-        open_cv_image = open_cv_image[:, :, ::-1].copy()
-        cv2.imshow('Network Image',open_cv_image)
-        cv2.imwrite('output.jpg', open_cv_image)
-        cv2.waitKey(0)
-        print('Image is %dx%d' % image.size)
-        image.verify()
-        print('Image is verified')
+
+    # open image
+    myfile = open(image, 'rb')
+    bytes = myfile.read()
+    size = len(bytes)
+
+    # send image size to server
+    sock.sendall("SIZE %s" % size)
+    answer = sock.recv(4096)
+
+    print('answer = %s' % answer)
+
+    # send image to server
+    if answer == 'GOT SIZE':
+        sock.sendall(bytes)
+
+        # check what server send
+        answer = sock.recv(4096)
+        print('answer = %s' % answer)
+
+        if answer == 'GOT IMAGE':
+            sock.sendall("BYE BYE ")
+            print('Image successfully send to server')
+
+    myfile.close()
+
 finally:
-    connection.close()
-    server_socket.close()
+    sock.close()
+
+# # initialize the camera and grab a reference to the raw camera capture
+# camera = PiCamera()
+# rawCapture = PiRGBArray(camera)
+#
+# # allow the camera to warmup
+# time.sleep(0.1)
+#
+# # Read time, and take image every hour or so
+# # Make sure that this can be updated by changing a variable!
+#
+# # grab an image from the camera
+# camera.capture(rawCapture, format="bgr")
+# image = rawCapture.array
+#
+# lt = time.localtime(time.time())
+# time = "{}_{}_{}_{}_{}".format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min)
+#
+# # Check every time an image is taken whether it can be sent to the PC or not
+# # If not, then store the data
+# # If it can, check whether there is additional data to send, then send all
+#
+# # PC just needs to be pinged, the PC itself doesn't need to actively send that it's ready
+#
+# cv2.imwrite("{}.jpg".format(time), image)
