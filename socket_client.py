@@ -19,17 +19,21 @@ try:
     print(data)
 
     image_len = sock.recv(4096)
-    image_len = image_len.decode('utf-8')
-    print(image_len)
+    image_len_new = image_len.decode('utf-8')
+    print(image_len_new)
 
     message = "Image Length Received"
     sock.send(message.encode('utf-8'))
 
     image = open('image.png', 'wb')
+    # image.write(image_len)
     data = sock.recv(40960000)
     print(data)
     image.write(data)
     image.close()
+
+    image = open('image.png')
+    print(image)
 finally:
     sock.close()
 
