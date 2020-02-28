@@ -13,7 +13,9 @@ try:
     size = 1
 
     # send image size to server
-    sock.sendall("Hi")
+    message = "Hi"
+    sock.send(message.encode('utf-8'))
+    print('message sent')
     answer = sock.recv(4096)
     print(answer)
 

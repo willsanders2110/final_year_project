@@ -23,10 +23,8 @@ while True:
         else:
             try:
                 data = sock.recv(4096)
-                txt = str(data)
-                if data:
-                    print(txt)
-                    sock.sendall("Hi")
+                print(data.decode('utf-8'))
+                sock.sendall("Hi")
             finally:
                 sock.close()
                 connected_clients_sockets.remove(sock)
