@@ -16,6 +16,6 @@ while True:
         data = connection.recv(4096)
         print(data.decode('utf-8'))
         message = "Hi"
-        server_socket.send(message.encode('utf-8'))
+        connection.send(message.encode('utf-8'))
     finally:
         server_socket.close()
