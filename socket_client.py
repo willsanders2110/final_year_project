@@ -13,6 +13,7 @@ try:
     # send image size to server
     message = "Computer Ready"
     sock.send(message.encode('utf-8'))
+
     data = sock.recv(4096)
     data = data.decode('utf-8')
     print(data)
@@ -20,6 +21,14 @@ try:
     image_len = sock.recv(4096)
     image_len = image_len.decode('utf-8')
     print(image_len)
+
+    message = "Image Length Received"
+    sock.send(message.encode('utf-8'))
+
+    image = open('image.png', 'wb')
+    data = sock.recv(40960000)
+    image.write(data)
+    image.close()
 finally:
     sock.close()
 

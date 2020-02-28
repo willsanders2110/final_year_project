@@ -17,6 +17,7 @@ try:
     data = connection.recv(4096)
     data = data.decode('utf-8')
     print(data)
+
     message = "Raspberry Pi Ready"
     connection.send(message.encode('utf-8'))
 
@@ -24,6 +25,12 @@ try:
     image = file.read()
     size = str(len(image))
     connection.send(size.encode('utf-8'))
+
+    data = connection.recv(4096)
+    data = data.decode('utf-8')
+    print(data)
+
+    connection.send(image)
 
 finally:
     server_socket.close()
