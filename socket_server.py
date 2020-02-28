@@ -15,13 +15,16 @@ server_socket.listen(10)
 
 while True:
     read_sockets, write_sockets, error_sockets = select.select(connected_clients_sockets, [], [])
+    print("getting to this bit")
 
     for sock in read_sockets:
         if sock == server_socket:
             sockfd, client_address = server_socket.accept()
             connected_clients_sockets.append(sockfd)
+            print("getting stuck")
         else:
             try:
+                print("entering this bit")
                 data = sock.recv(4096)
                 txt = str(data)
                 if data:
