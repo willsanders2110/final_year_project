@@ -18,7 +18,6 @@ try:
     print('message sent')
     answer = sock.recv(4096)
     print(answer)
-
 finally:
     sock.close()
 
