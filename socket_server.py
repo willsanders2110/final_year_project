@@ -30,6 +30,7 @@ try:
     data = data.decode('utf-8')
     print(data)
 
+    print(image)
     connection.send(image)
 
 finally:
