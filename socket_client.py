@@ -10,14 +10,12 @@ server_address = (HOST, PORT)
 sock.connect(server_address)
 
 try:
-    size = 1
-
     # send image size to server
     message = "Hi"
     sock.send(message.encode('utf-8'))
     print('message sent')
     answer = sock.recv(4096)
-    print(answer)
+    print(answer.decode('utf-8'))
 finally:
     sock.close()
 
