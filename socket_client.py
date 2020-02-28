@@ -27,6 +27,7 @@ try:
 
     image = open('image.png', 'wb')
     data = sock.recv(40960000)
+    print(data)
     image.write(data)
     image.close()
 finally:
