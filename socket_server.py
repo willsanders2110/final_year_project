@@ -1,6 +1,6 @@
 import socket
 from picamera import PiCamera
-import PiRGBArray
+from picamera.array import PiRGBArray
 import time
 
 HOST = '192.168.0.29'
