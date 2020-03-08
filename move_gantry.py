@@ -1,40 +1,36 @@
 #!/usr/bin/python
-import serial as sl
 import time
 
 
 class GantryControls:
-    def __init(self, ser):
-        self.ser = ser
-
-    def move_up_position(self):
-        self.ser.write('1')
+    def move_up_position(self, ser):
+        ser.write('1')
         time.sleep(2)
-        msg = self.ser.readline()
+        msg = ser.readline()
         print("At position: {}".format(msg))
     
-    def move_down_position(self):
-        self.ser.write('2')
+    def move_down_position(self, ser):
+        ser.write('2')
         time.sleep(2)
-        msg = self.ser.readline()
+        msg = ser.readline()
         print("At position: {}".format(msg))
     
-    def move_home(self):
-        self.ser.write('3')
+    def move_home(self, ser):
+        ser.write('3')
         time.sleep(6)
-        msg = self.ser.readline()
+        msg = ser.readline()
         print("At position: {}".format(msg))
     
-    def small_shift_right(self):
-        self.ser.write('4')
+    def small_shift_right(self, ser):
+        ser.write('4')
         time.sleep(2)
-        msg = self.ser.readline()
+        msg = ser.readline()
         print("At position: {}".format(msg))
     
-    def small_shift_left(self):
-        self.ser.write('5')
+    def small_shift_left(self, ser):
+        ser.write('5')
         time.sleep(2)
-        msg = self.ser.readline()
+        msg = ser.readline()
         print("At position: {}".format(msg))
 
 
