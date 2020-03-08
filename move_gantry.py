@@ -3,10 +3,9 @@ import serial as sl
 import time
 
 
-class MoveGantry:
+class GantryControls:
     def __init(self):
         self.ser = sl.serial('/dev/ttyUSB0', 9600)
-        time.sleep(5)
 
     def move_up_position(self):
         self.ser.write('1')
