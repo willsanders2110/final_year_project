@@ -2,6 +2,7 @@ import socket
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 import time
+import cv2
 
 HOST = '192.168.0.29'
 PORT = 8200
@@ -45,7 +46,7 @@ try:
     #
     # # PC just needs to be pinged, the PC itself doesn't need to actively send that it's ready
     #
-    # cv2.imwrite("{}.jpg".format(time), image)
+    cv2.imwrite("image.png", image)
 
     # file = open(image, 'rb')
     # image = file.read()
@@ -56,7 +57,10 @@ try:
     data = data.decode('utf-8')
     print(data)
 
-    connection.send(image)
+    my_file = open(image, 'rb')
+    image_bytes = my_file.read()
+
+    connection.send(image_bytes)
 
 finally:
     server_socket.close()
