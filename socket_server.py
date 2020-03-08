@@ -3,9 +3,13 @@ from picamera import PiCamera
 from picamera.array import PiRGBArray
 import time
 import cv2
+import struct
+import pickle
 
 HOST = '192.168.0.29'
 PORT = 8200
+
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -37,30 +41,20 @@ try:
     camera.capture(rawCapture, format="bgr")
     image = rawCapture.array
 
-    # lt = time.localtime(time.time())
-    # time = "{}_{}_{}_{}_{}".format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min)
+    result, frame = cv2.imencode('.jpg', image, encode_param)
+
+    data = pickle.dumps(frame, 0)
+    size = len(data)
+
+    # print("{}: {}".format(img_counter, size))
+    connection.sendall(struct.pack(">L", size) + data)
+
+    # cv2.imwrite("image.png", image)
     #
-    # # Check every time an image is taken whether it can be sent to the PC or not
-    # # If not, then store the data
-    # # If it can, check whether there is additional data to send, then send all
+    # my_file = open(image, 'rb')
+    # image_bytes = my_file.read()
     #
-    # # PC just needs to be pinged, the PC itself doesn't need to actively send that it's ready
-    #
-    cv2.imwrite("image.png", image)
-
-    # file = open(image, 'rb')
-    # image = file.read()
-    size = str(len(image))
-    connection.send(size.encode('utf-8'))
-
-    data = connection.recv(4096)
-    data = data.decode('utf-8')
-    print(data)
-
-    my_file = open(image, 'rb')
-    image_bytes = my_file.read()
-
-    connection.send(image_bytes)
+    # connection.send(image_bytes)
 
 finally:
     server_socket.close()
