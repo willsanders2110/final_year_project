@@ -4,8 +4,8 @@ import time
 
 
 class GantryControls:
-    def __init(self):
-        self.ser = sl.serial('/dev/ttyUSB0', 9600)
+    def __init(self, ser):
+        self.ser = ser
 
     def move_up_position(self):
         self.ser.write('1')
