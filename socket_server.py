@@ -1,5 +1,5 @@
 import socket
-import PiCamera
+import picamera import PiCamera
 import PiRGBArray
 import time
 
