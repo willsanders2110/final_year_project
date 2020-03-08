@@ -47,8 +47,8 @@ try:
     #
     # cv2.imwrite("{}.jpg".format(time), image)
 
-    file = open(image, 'rb')
-    image = file.read()
+    # file = open(image, 'rb')
+    # image = file.read()
     size = str(len(image))
     connection.send(size.encode('utf-8'))
 
