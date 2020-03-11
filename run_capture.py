@@ -6,11 +6,13 @@ import cv2
 
 
 def job():
-    min = local_time.tm_min
+    local_time = time.localtime()
+
+    minute = local_time.tm_min
     hr = local_time.tm_hour
     day = local_time.tm_mday
     month = local_time.tm_mon
-    image_name = '{}/{}_{}_{}_{}'.format(directory_name, month, day, hr, min)
+    image_name = '{}/{}_{}_{}_{}'.format(directory_name, month, day, hr, minute)
 
     print("capturing image")
     capture(image_name)
@@ -33,12 +35,12 @@ def capture(image_name):
 
     cv2.imwrite('{}.png'.format(image_name), image)
 
+    print("inside capturing function")
+
     camera.close()
 
 
 schedule.every(1).minutes.do(job)
-
-local_time = time.localtime()
 
 directory_name = 'images'
 
