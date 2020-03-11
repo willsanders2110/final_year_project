@@ -12,7 +12,9 @@ def job():
     month = local_time.tm_mon
     image_name = '{}/{}_{}_{}_{}'.format(directory_name, month, day, hr, min)
 
+    print("capturing image")
     capture(image_name)
+    print("captured image")
 
 
 def capture(image_name):
