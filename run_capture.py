@@ -30,6 +30,8 @@ def capture(image_name):
 
     cv2.imwrite('{}.png'.format(image_name), image)
 
+    camera.close()
+
 
 schedule.every(1).minutes.do(job)
 
