@@ -5,7 +5,7 @@ import time
 capture = Capture()
 local_time = time.localtime()
 
-directory_name = '../Desktop/images'
+directory_name = 'images'
 
 
 def job():
