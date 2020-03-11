@@ -6,10 +6,11 @@ import cv2
 
 
 def job():
+    min = local_time.tm_min
     hr = local_time.tm_hour
     day = local_time.tm_mday
     month = local_time.tm_mon
-    image_name = '{}/{}_{}_{}'.format(directory_name, month, day, hr)
+    image_name = '{}/{}_{}_{}_{}'.format(directory_name, month, day, hr, min)
 
     capture(image_name)
 
