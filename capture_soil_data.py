@@ -1,9 +1,23 @@
-import serial as sl
-import time
+#!/usr/bin/python
 
-ser = sl.Serial('/dev/ttyACM0', 9600)
-time.sleep(2)
 
-ser.write('1')
-msg = ser.readline()
-print(msg)
+class MoistureData:
+    def position_1_data(self, ser):
+        ser.write('1')
+        msg = ser.readline()
+        return msg
+
+    def position_2_data(self, ser):
+        ser.write('2')
+        msg = ser.readline()
+        return msg
+
+    def position_3_data(self, ser):
+        ser.write('3')
+        msg = ser.readline()
+        return msg
+
+    def position_4_data(self, ser):
+        ser.write('4')
+        msg = ser.readline()
+        return msg

@@ -1,8 +1,13 @@
 import schedule
+import serial as sl
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 import time
 import cv2
+from capture_soil_data import MoistureData
+
+ser = sl.Serial('/dev/ttyACM0', 9600)
+time.sleep(2)
 
 
 def job():
@@ -34,6 +39,9 @@ def capture(image_name):
     cv2.imwrite('{}.png'.format(image_name), image)
 
     camera.close()
+
+    pos_1 = MoistureData.position_1_data()
+    print(pos_1)
 
 
 schedule.every().hour.do(job)
