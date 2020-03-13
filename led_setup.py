@@ -16,6 +16,6 @@ class LED:
         GPIO.output(self.LED_2, GPIO.HIGH)
 
     def led_off(self):
-        print('LEDs on')
+        print('LEDs off')
         GPIO.output(self.LED_1, GPIO.LOW)
         GPIO.output(self.LED_2, GPIO.LOW)
