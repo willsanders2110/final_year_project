@@ -15,7 +15,7 @@ args = vars(ap.parse_args())
 
 
 def job():
-    for i in args['number']:
+    for i in range(args['number']):
         capture_image()
         get_moisture_data(i+1)
 
