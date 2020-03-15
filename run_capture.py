@@ -7,6 +7,7 @@ import cv2
 from capture_soil_data import MoistureData
 from move_gantry import GantryControls
 import argparse
+from led_setup import LED
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-n", "--number", type=int, help="number of plants in set")
@@ -14,13 +15,12 @@ args = vars(ap.parse_args())
 
 
 def job():
-    capture_image()
-    get_moisture_data(1)
+    for i in args['number']:
+        capture_image()
+        get_moisture_data(i+1)
 
-    gantry.move_up_position(motor_connect)
-    capture_image()
-    get_moisture_data(2)
-    
+        gantry.move_up_position(motor_connect)
+
     gantry.move_home(motor_connect)
 
 
@@ -35,6 +35,7 @@ def capture_image():
 
     camera = PiCamera()
     raw_capture = PiRGBArray(camera)
+    led.led_on()
 
     # allow the camera to warmup
     time.sleep(0.1)
@@ -42,6 +43,8 @@ def capture_image():
     # grab an image from the camera
     camera.capture(raw_capture, format="bgr")
     image = raw_capture.array
+
+    led.led_off()
 
     cv2.imwrite('{}.png'.format(image_name), image)
 
@@ -73,6 +76,7 @@ time.sleep(2)
 
 moisture_data = MoistureData()
 gantry = GantryControls()
+led = LED()
 
 schedule.every().minute.do(job)
 
