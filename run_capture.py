@@ -16,12 +16,6 @@ args = vars(ap.parse_args())
 
 
 def job():
-    conn = sqlite3.connect('sensor_data.db')
-    c = conn.cursor()
-
-    c.execute('''CREATE TABLE moisture_data
-                 (time, plant_1, plant_2, plant_3, plant_4)''')
-
     local_time = time.localtime()
 
     minute = local_time.tm_min
@@ -93,6 +87,12 @@ moisture_connect = sl.Serial('/dev/ttyACM0', 9600)
 time.sleep(2)
 motor_connect = sl.Serial('/dev/ttyUSB0', 9600)
 time.sleep(2)
+
+conn = sqlite3.connect('sensor_data.db')
+c = conn.cursor()
+
+c.execute('''CREATE TABLE moisture_data
+             (time, plant_1, plant_2, plant_3, plant_4)''')
 
 moisture_data = MoistureData()
 gantry = GantryControls()
