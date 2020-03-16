@@ -8,30 +8,50 @@ from capture_soil_data import MoistureData
 from move_gantry import GantryControls
 import argparse
 from led_setup import LED
+import sqlite3
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-n", "--number", type=int, help="number of plants in set")
+ap.add_argument("-n", "--number", type=int, default=1, help="number of plants in set")
 args = vars(ap.parse_args())
 
 
 def job():
-    for i in range(args['number']):
-        capture_image(i+1)
-        get_moisture_data(i+1)
+    conn = sqlite3.connect('sensor_data.db')
+    c = conn.cursor()
 
-        gantry.move_up_position(motor_connect)
+    c.execute('''CREATE TABLE moisture_data
+                 (time, plant_1, plant_2, plant_3, plant_4)''')
 
-    gantry.move_home(motor_connect)
-
-
-def capture_image(plant_no):
     local_time = time.localtime()
 
     minute = local_time.tm_min
     hr = local_time.tm_hour
     day = local_time.tm_mday
     month = local_time.tm_mon
-    image_name = '{}/{}_{}_{}_{}_{}'.format(directory_name, month, day, hr, minute, plant_no)
+
+    time_stamp = '{}_{}_{}_{}'.format(month, day, hr, minute)
+
+    data = []
+    data.append(time_stamp)
+    for i in range(args['number']):
+        image_name = '{}/{}_{}'.format(directory_name, time_stamp, i+1)
+
+        capture_image(image_name)
+        m_data = get_moisture_data(i+1)
+        data.append(m_data)
+
+        gantry.move_up_position(motor_connect)
+
+    for i in range(4-args['number']):
+        data.append(0)
+
+    c.execute("""INSERT INTO moisture_data 
+                 VALUES ('{}','{}','{}','{}','{}')""".format(data[0], data[1], data[2], data[3], data[4]))
+    conn.commit()
+    gantry.move_home(motor_connect)
+
+
+def capture_image(image_name):
 
     camera = PiCamera()
     raw_capture = PiRGBArray(camera)
@@ -54,19 +74,19 @@ def capture_image(plant_no):
 def get_moisture_data(val):
     if val == 1:
         moisture_1 = moisture_data.position_1_data(moisture_connect)
-        print(moisture_1)
+        return moisture_1.decode()
 
     elif val == 2:
         moisture_2 = moisture_data.position_2_data(moisture_connect)
-        print(moisture_2)
+        return moisture_2.decode()
 
     elif val == 3:
         moisture_3 = moisture_data.position_3_data(moisture_connect)
-        print(moisture_3)
+        return moisture_3.decode()
 
     elif val == 4:
         moisture_4 = moisture_data.position_4_data(moisture_connect)
-        print(moisture_4)
+        return moisture_4.decode()
 
 
 moisture_connect = sl.Serial('/dev/ttyACM0', 9600)
@@ -78,7 +98,7 @@ moisture_data = MoistureData()
 gantry = GantryControls()
 led = LED()
 
-schedule.every().hour.do(job)
+schedule.every().minute.do(job)
 
 directory_name = 'images'
 
