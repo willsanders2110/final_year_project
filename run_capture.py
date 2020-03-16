@@ -16,7 +16,7 @@ args = vars(ap.parse_args())
 
 def job():
     for i in range(args['number']):
-        capture_image()
+        capture_image(i+1)
         get_moisture_data(i+1)
 
         gantry.move_up_position(motor_connect)
@@ -24,14 +24,14 @@ def job():
     gantry.move_home(motor_connect)
 
 
-def capture_image():
+def capture_image(plant_no):
     local_time = time.localtime()
 
     minute = local_time.tm_min
     hr = local_time.tm_hour
     day = local_time.tm_mday
     month = local_time.tm_mon
-    image_name = '{}/{}_{}_{}_{}'.format(directory_name, month, day, hr, minute)
+    image_name = '{}/{}_{}_{}_{}_{}'.format(directory_name, month, day, hr, minute, plant_no)
 
     camera = PiCamera()
     raw_capture = PiRGBArray(camera)
