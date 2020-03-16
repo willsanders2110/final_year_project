@@ -95,7 +95,7 @@ moisture_data = MoistureData()
 gantry = GantryControls()
 led = LED()
 
-schedule.every().minute.do(job)
+schedule.every().hour.do(job)
 
 directory_name = 'images'
 
