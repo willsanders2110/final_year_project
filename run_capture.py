@@ -68,19 +68,19 @@ def capture_image(image_name):
 def get_moisture_data(val):
     if val == 1:
         moisture_1 = moisture_data.position_1_data(moisture_connect)
-        return moisture_1.decode()
+        return moisture_1
 
     elif val == 2:
         moisture_2 = moisture_data.position_2_data(moisture_connect)
-        return moisture_2.decode()
+        return moisture_2
 
     elif val == 3:
         moisture_3 = moisture_data.position_3_data(moisture_connect)
-        return moisture_3.decode()
+        return moisture_3
 
     elif val == 4:
         moisture_4 = moisture_data.position_4_data(moisture_connect)
-        return moisture_4.decode()
+        return moisture_4
 
 
 moisture_connect = sl.Serial('/dev/ttyACM0', 9600)
