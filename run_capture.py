@@ -31,8 +31,8 @@ def job():
         image_name = '{}/{}_{}'.format(directory_name, time_stamp, i+1)
 
         capture_image(image_name)
-        m_data = get_moisture_data(i+1)
-        data.append(m_data.decode())
+        m_data = get_moisture_data(i+1).decode()
+        data.append(m_data)
 
         gantry.move_up_position(motor_connect)
 
@@ -95,7 +95,7 @@ moisture_data = MoistureData()
 gantry = GantryControls()
 led = LED()
 
-schedule.every().hour.do(job)
+schedule.every().minute.do(job)
 
 directory_name = 'images'
 
