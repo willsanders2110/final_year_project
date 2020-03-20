@@ -5,7 +5,9 @@ class MoistureData:
     def position_1_data(self, ser):
         ser.write('1'.encode())
         msg = ser.readline()
+        print(msg)
         msg = msg.decode()
+        print(msg)
         return msg
 
     def position_2_data(self, ser):
