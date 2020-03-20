@@ -31,7 +31,7 @@ def job():
         image_name = '{}/{}_{}'.format(directory_name, time_stamp, i+1)
 
         capture_image(image_name)
-        m_data = get_moisture_data(i+1).decode()
+        m_data = get_moisture_data(i+1)
         data.append(m_data)
 
         gantry.move_up_position(motor_connect)
