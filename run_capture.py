@@ -32,7 +32,7 @@ def job():
 
         capture_image(image_name)
         m_data = get_moisture_data(i+1)
-        data.append(m_data)
+        data.append(m_data.decode())
 
         gantry.move_up_position(motor_connect)
 
