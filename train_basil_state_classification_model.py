@@ -47,7 +47,7 @@ testY = LabelBinarizer().fit_transform(testY)
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.005)
-model = LeNet.build(width=32, height=32, depth=3, classes=3)
+model = MiniVGGNet.build(width=32, height=32, depth=3, classes=3)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # train the network
@@ -55,7 +55,7 @@ print("[INFO] training network...")
 H = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=32, epochs=100, verbose=1)
 
 # save model
-model.save("model_1")
+model.save("model")
 
 # evaluate the network
 print("[INFO] evaluating network...")

@@ -40,6 +40,4 @@ void loop() {
     sensorValue4 = analogRead(sensorPin4);
     Serial.println(sensorValue4);
   }
-
-  
 }

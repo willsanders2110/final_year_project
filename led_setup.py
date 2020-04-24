@@ -7,7 +7,7 @@ class LED:
         GPIO.setwarnings(False)
         self.LED_1 = 17
         self.LED_2 = 27
-        self.LED_3 = 22
+        self.LED_3 = 2
         self.LED_4 = 23
         self.LED_5 = 24
         self.LED_6 = 25

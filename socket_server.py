@@ -47,6 +47,8 @@ try:
     size = len(data)
 
     # print("{}: {}".format(img_counter, size))
+    connection.send(size.encode('utf-8'))
+
     connection.sendall(struct.pack(">L", size) + data)
 
     # cv2.imwrite("image.png", image)

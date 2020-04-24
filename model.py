@@ -4,10 +4,13 @@
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from pyimagesearch.preprocessing import ImageToArrayPreprocessor
-from pyimagesearch.preprocessing import SimplePreprocessor
-from pyimagesearch.datasets import SimpleDatasetLoader
-from pyimagesearch.nn.conv import ShallowNet
+from dl4cv.preprocessing import ImageToArrayPreprocessor
+from dl4cv.preprocessing import SimplePreprocessor
+from dl4cv.datasets import SimpleDatasetLoader
+from dl4cv.nn.conv import ShallowNet
+from dl4cv.nn.conv import LeNet
+from dl4cv.nn.conv import MiniVGGNet
+from dl4cv.nn.conv import PredictAge
 from keras.optimizers import SGD
 from imutils import paths
 import matplotlib.pyplot as plt
@@ -44,7 +47,7 @@ testY = LabelBinarizer().fit_transform(testY)
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.005)
-model = ShallowNet.build(width=32, height=32, depth=3, classes=6)
+model = PredictAge.build(width=32, height=32, depth=3, classes=6)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # train the network
@@ -57,9 +60,9 @@ model.save("model_1")
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
-print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=["class_1", "class_2",
-                                                                                            "class_3", "class_4",
-                                                                                            "class_5", "class_6"]))
+print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=["0_200", "201_400",
+                                                                                            "401_600", "601_800",
+                                                                                            "801_1000", "1000+"]))
 
 # plot the training loss and accuracy
 plt.style.use("ggplot")

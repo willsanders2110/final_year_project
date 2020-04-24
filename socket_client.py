@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import socket
+import cv2
+import struct
+import pickle
 
 HOST = '192.168.0.29'
 PORT = 8200
@@ -8,6 +11,9 @@ PORT = 8200
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = (HOST, PORT)
 sock.connect(server_address)
+
+data = b""
+payload_size = struct.calcsize(">L")
 
 try:
     # send image size to server
@@ -18,22 +24,42 @@ try:
     data = data.decode('utf-8')
     print(data)
 
-    image_len = sock.recv(4096)
-    image_len_new = image_len.decode('utf-8')
-    print(image_len_new)
+    # while len(data) < payload_size:
+    #     print("Recv: {}".format(len(data)))
+    #     data += sock.recv(4096)
+    #
+    # print("Done Recv: {}".format(len(data)))
+    # packed_msg_size = data[:payload_size]
+    # data = data[payload_size:]
+    # msg_size = struct.unpack(">L", packed_msg_size)[0]
 
-    message = "Image Length Received"
-    sock.send(message.encode('utf-8'))
 
-    image = open('image.png', 'wb')
-    # image.write(image_len)
-    data = sock.recv(40960000)
-    print(data)
-    image.write(data)
-    image.close()
+    print("msg_size: {}".format(msg_size))
 
-    image = open('image.png')
-    print(image)
+    while len(data) < msg_size:
+        data += sock.recv(4096)
+    frame_data = data[:msg_size]
+    data = data[msg_size:]
+
+    frame = pickle.loads(frame_data, fix_imports=True, encoding="bytes")
+    frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+    cv2.imshow('ImageWindow', frame)
+    cv2.waitKey(1)
+
+    # image = open('image.png', 'wb')
+    # # image.write(image_len)
+    # data = sock.recv(40960000)
+    # # data.decode('utf-8')
+    # image.write(data)
+    # image.close()
+    #
+    # # image = open('image.png')
+    # # print(image)
+    # image = cv2.imread('image.png')
+    # cv2.imshow('image', image)
+    #
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 finally:
     sock.close()
 
