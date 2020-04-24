@@ -62,7 +62,7 @@ class PredictAge:
 		model.add(Dropout(0.5))
 
 		# first (and only) set of FC => RELU layers
-		model.add(Flatten())
+		# model.add(Flatten())
 		model.add(Dense(512))
 		model.add(Activation("relu"))
 		# model.add(BatchNormalization())
